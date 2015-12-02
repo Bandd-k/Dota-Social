@@ -1,0 +1,157 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema Dotadb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema Dotadb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `Dotadb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `Dotadb` ;
+
+-- -----------------------------------------------------
+-- Table `Dotadb`.`Team`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Dotadb`.`Team` (
+  `team_id` INT NOT NULL,
+  `name` VARCHAR(45) NULL,
+  PRIMARY KEY (`team_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Dotadb`.`User`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Dotadb`.`User` (
+  `account_id` INT NOT NULL,
+  `team_id` INT NULL,
+  `nickname` VARCHAR(70) NULL,
+  `wins` INT NULL,
+  `loses` INT NULL,
+  `gpm` INT NULL,
+  `xpm` INT NULL,
+  `kda` INT NULL,
+  PRIMARY KEY (`account_id`),
+  INDEX `FK_team_idx` (`team_id` ASC),
+  CONSTRAINT `FK_team`
+    FOREIGN KEY (`team_id`)
+    REFERENCES `Dotadb`.`Team` (`team_id`)
+    ON DELETE CASCADE
+    ON UPDATE SET NULL)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Dotadb`.`Match`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Dotadb`.`Match` (
+  `match_id` VARCHAR(45) NOT NULL,
+  `match_seq_num` INT NULL,
+  `start_time` INT NULL,
+  `lobby_type` INT NULL,
+  `first_blood_time` INT NULL,
+  `radiant_win` TINYINT(1) NULL,
+  `duration` INT NULL,
+  `tower_status_radiant` INT NULL,
+  `tower_status_dire` INT NULL,
+  `barracks_status_radiant` INT NULL,
+  `barracks_status_dire` INT NULL,
+  `cluster` INT NULL,
+  `human_players` INT NULL,
+  `leagueid` INT NULL,
+  `game_mode` INT NULL,
+  PRIMARY KEY (`match_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Dotadb`.`User_Match`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Dotadb`.`User_Match` (
+  `match_id` VARCHAR(45) NOT NULL,
+  `player_slot` INT NULL,
+  `hero_id` INT NULL,
+  `account_id` INT NOT NULL,
+  `item_0` INT NULL,
+  `item_1` INT NULL,
+  `item_2` INT NULL,
+  `item_3` INT NULL,
+  `item_4` INT NULL,
+  `item_5` INT NULL,
+  `kills` INT NULL,
+  `deaths` INT NULL,
+  `assists` INT NULL,
+  `leaver_status` INT NULL,
+  `gold` INT NULL,
+  `last_hits` INT NULL,
+  `denies` INT NULL,
+  `gold_per_min` INT NULL,
+  `xp_per_min` INT NULL,
+  `gold_spent` INT NULL,
+  `hero_damage` INT NULL,
+  `tower_damage` INT NULL,
+  `hero_healing` INT NULL,
+  `level` INT NULL,
+  PRIMARY KEY (`match_id`, `account_id`),
+  INDEX `FK_toUser_idx` (`account_id` ASC),
+  CONSTRAINT `FK_toMatch`
+    FOREIGN KEY (`match_id`)
+    REFERENCES `Dotadb`.`Match` (`match_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `FK_toUser`
+    FOREIGN KEY (`account_id`)
+    REFERENCES `Dotadb`.`User` (`account_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Dotadb`.`Picks`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Dotadb`.`Picks` (
+  `match_id` VARCHAR(45) NOT NULL,
+  `order` INT NOT NULL,
+  `team` TINYINT(1) NOT NULL,
+  `is_pick` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`match_id`, `order`),
+  CONSTRAINT `FK_match_id`
+    FOREIGN KEY (`match_id`)
+    REFERENCES `Dotadb`.`Match` (`match_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Dotadb`.`Abilities_upgrades`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Dotadb`.`Abilities_upgrades` (
+  `match_id` VARCHAR(45) NOT NULL,
+  `account_id` INT NULL,
+  `level` INT NOT NULL,
+  `ability` INT NULL,
+  PRIMARY KEY (`match_id`, `account_id`, `level`),
+  INDEX `FK_user_idx` (`account_id` ASC),
+  CONSTRAINT `FK_amatch`
+    FOREIGN KEY (`match_id`)
+    REFERENCES `Dotadb`.`User_Match` (`match_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `FK_auser`
+    FOREIGN KEY (`account_id`)
+    REFERENCES `Dotadb`.`User_Match` (`account_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

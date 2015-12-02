@@ -42,4 +42,7 @@ def addOneMatchToBase(match_id=1968338912):
                         match['duration'],match['tower_status_radiant'],match['tower_status_dire'],match['barracks_status_radiant'],match['barracks_status_dire'],match['cluster'],match['human_players'],match['leagueid'],match['game_mode'])
     session.add(addingMatch)
     session.commit()
+    players = match['players']
+    for players in players:
+        
     #return match
