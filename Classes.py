@@ -41,7 +41,7 @@ class User(DECLARATIVE_BASE):
     kda = Column(INTEGER)
 
     team = relationship("Team", foreign_keys=[team_id], backref="user")
-    def __init__(self,account_id,team_id,nickname,wins,loses,gpm,xpm,kda):
+    def __init__(self,account_id,nickname,team_id=None,wins=0,loses=0,gpm=0,xpm=0,kda=0):
         self.account_id = account_id
         self.team_id = team_id
         self.nickname = nickname
@@ -145,6 +145,32 @@ class UserMatch(DECLARATIVE_BASE):
     match = relationship("Match", foreign_keys=[match_id], backref="userMatch")
     user = relationship("User", foreign_keys=[account_id], backref="userMatch")
 
+    def __init__(self,match_id,player_slot,hero_id,account_id,item_0,item_1,item_2,item_3,item_4,item_5,kills,deaths,
+                 assists,leaver_status,gold,last_hits,denies,gold_per_min,xp_per_min,gold_spent,hero_damage,tower_damage,hero_healing,level):
+        self.match_id = match_id
+        self.player_slot = player_slot
+        self.hero_id = hero_id
+        self.account_id = account_id
+        self.item_0 = item_0
+        self.item_1 = item_1
+        self.item_2 = item_2
+        self.item_3 = item_3
+        self.item_4 = item_4
+        self.item_5 = item_5
+        self.kills = kills
+        self.deaths = deaths
+        self.assists = assists
+        self.leaver_status = leaver_status
+        self.gold = gold
+        self.last_hits = last_hits
+        self.denies = denies
+        self.gold_per_min = gold_per_min
+        self.xp_per_min = xp_per_min
+        self.gold_spent = gold_spent
+        self.hero_damage = hero_damage
+        self.tower_damage = tower_damage
+        self.hero_healing = hero_healing
+        self.level = level
     def __repr__(self):
         return self.__str__()
 
