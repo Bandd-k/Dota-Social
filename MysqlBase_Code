@@ -28,7 +28,7 @@ ENGINE = InnoDB;
 -- Table `Dotadb`.`User`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Dotadb`.`User` (
-  `account_id` INT NOT NULL,
+  `account_id` BIGINT(20) NOT NULL,
   `team_id` INT NULL,
   `nickname` VARCHAR(70) NULL,
   `wins` INT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `Dotadb`.`User_Match` (
   `match_id` VARCHAR(45) NOT NULL,
   `player_slot` INT NULL,
   `hero_id` INT NULL,
-  `account_id` INT NOT NULL,
+  `account_id` BIGINT(20) NOT NULL,
   `item_0` INT NULL,
   `item_1` INT NULL,
   `item_2` INT NULL,
@@ -134,7 +134,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Dotadb`.`Abilities_upgrades` (
   `match_id` VARCHAR(45) NOT NULL,
-  `account_id` INT NULL,
+  `account_id` BIGINT(20) NULL,
   `level` INT NOT NULL,
   `ability` INT NULL,
   PRIMARY KEY (`match_id`, `account_id`, `level`),
